@@ -1,4 +1,5 @@
 from .abstractiter import AbstractIter
+from collections import deque
 
 
 class PreOrderIter(AbstractIter):
@@ -40,11 +41,19 @@ class PreOrderIter(AbstractIter):
 
     @staticmethod
     def _iter(children, filter_, stop, maxlevel):
-        for child_ in children:
+        cur_children = deque(children)
+        descendantmaxlevel = maxlevel
+        while cur_children:
+            child_ = cur_children.popleft()
             if stop(child_):
                 continue
             if filter_(child_):
                 yield child_
-            if not AbstractIter._abort_at_level(2, maxlevel):
-                descendantmaxlevel = maxlevel - 1 if maxlevel else None
-                yield from PreOrderIter._iter(child_.children, filter_, stop, descendantmaxlevel)
+            if not AbstractIter._abort_at_level(2, descendantmaxlevel):
+                descendantmaxlevel = descendantmaxlevel - 1 if descendantmaxlevel else None
+                if len(child_.children) == 1:
+                    cur_children.appendleft(child_.children[0])
+                    continue
+                else:
+                    yield from PreOrderIter._iter(child_.children, filter_, stop, descendantmaxlevel)
+            descendantmaxlevel = maxlevel
