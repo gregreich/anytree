@@ -53,6 +53,5 @@ class PreOrderIter(AbstractIter):
                 if len(child_.children) == 1:
                     cur_children.append(child_.children[0])
                     continue
-                else:
-                    yield from PreOrderIter._iter(child_.children, filter_, stop, descendantmaxlevel)
+                yield from PreOrderIter._iter(child_.children, filter_, stop, descendantmaxlevel)
             descendantmaxlevel = maxlevel

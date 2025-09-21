@@ -31,7 +31,7 @@ def test_preorder():
     eq_(list(PreOrderIter(f, maxlevel=2)), [f, b, g])
     eq_(list(PreOrderIter(f, maxlevel=3)), [f, b, a, d, g, i])
     eq_(list(PreOrderIter(f, maxlevel=4)), [f, b, a, k, d, c, e, g, i, h])
-    eq_(list(PreOrderIter(f, maxlevel=5)), list(PreOrderIter(f)))
+    eq_(list(PreOrderIter(f, maxlevel=f.height + 1)), list(PreOrderIter(f)))
     eq_(list(PreOrderIter(f, filter_=lambda n: n.name not in ("e", "g"))), [f, b, a, k, o, d, c, m, i, h])
     eq_(list(PreOrderIter(f, stop=lambda n: n.name == "d")), [f, b, a, k, o, g, i, h])
 
